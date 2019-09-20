@@ -9,7 +9,124 @@ namespace TwitterCloneMVC.DataAccess
 {
     public class DAL
     {
+        public bool AddToFollow(string userId)
+        {
+            Person presentPerson = new Person();
+            Person toBeFollowedPerson = new Person();
+            using (FSDEntities dbContext = new FSDEntities())
+            {
+                try
+                {
+                    List<FollowersEntity> ent = new List<FollowersEntity>();
+                   
+                    toBeFollowedPerson = dbContext.People.Where(x => x.user_id == userId).FirstOrDefault();
+                    dbContext.People.Where(x => x.user_id == userId).First().People.Add(toBeFollowedPerson);
+                    //presentPerson.People.Add(toBeFollowedPerson);
+                    dbContext.SaveChanges();
+                    return true;
+                }
 
+                catch (DbEntityValidationException ex)
+                {
+                    // Retrieve the error messages as a list of strings.
+                    var errorMessages = ex.EntityValidationErrors
+                            .SelectMany(x => x.ValidationErrors)
+                            .Select(x => x.ErrorMessage);
+
+                    // Join the list to a single string.
+                    var fullErrorMessage = string.Join("; ", errorMessages);
+
+                    // Combine the original exception message with the new one.
+                    var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+
+                    // Throw a new DbEntityValidationException with the improved exception message.
+                    throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+                    return false;
+                }
+            }
+        }
+
+        public Person ManageAccount(string userid)
+        {
+            using (FSDEntities dbContext = new FSDEntities())
+            {
+                Person present = dbContext.People.Where(x => x.user_id == userid).First();
+                return (present);
+            }
+        }
+
+        public bool UpdateAccount(Person updatePerson, string userid)
+        {
+            try
+            {
+                using (FSDEntities dbContext = new FSDEntities())
+                {
+                    Person present = dbContext.People.Where(x => x.user_id == userid).First();
+                    present.email = updatePerson.email;
+                    present.fullName = updatePerson.fullName;
+                    present.active = updatePerson.active;
+                    dbContext.SaveChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public List<Person> SearchtoFollow(string userId)
+        {
+            List<Person> follwers = new List<Person>();
+            using (FSDEntities dbContext = new FSDEntities())
+            {
+                try
+                {
+                    List<FollowersEntity> ent = new List<FollowersEntity>();
+
+                    follwers = dbContext.People.Where(x => x.user_id != userId).ToList();
+
+                    return follwers;
+                }
+
+                catch (DbEntityValidationException ex)
+                {
+                    // Retrieve the error messages as a list of strings.
+                    var errorMessages = ex.EntityValidationErrors
+                            .SelectMany(x => x.ValidationErrors)
+                            .Select(x => x.ErrorMessage);
+
+                    // Join the list to a single string.
+                    var fullErrorMessage = string.Join("; ", errorMessages);
+
+                    // Combine the original exception message with the new one.
+                    var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+
+                    // Throw a new DbEntityValidationException with the improved exception message.
+                    throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+                }
+            }
+        }
+        public bool DeleteTweet(int id)
+        {
+            try
+            {
+                using (FSDEntities dbContext = new FSDEntities())
+                {
+
+                    var PresntTweet = (Tweet)dbContext.Tweets.Where(x => x.tweet_id == id).First();
+                    dbContext.Tweets.Remove(PresntTweet);
+                    dbContext.SaveChanges();
+                    return true;
+
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            
+        }
         public List<Tweet> ManageTweets(string userid)
         {
             List<Tweet> tweets = new List<Tweet>();
@@ -21,6 +138,37 @@ namespace TwitterCloneMVC.DataAccess
             }
             return tweets;
 
+        }
+        public Tweet EditTweet(int id)
+        {
+            using (FSDEntities dbContext = new FSDEntities())
+            {
+
+                var tweet = (Tweet)dbContext.Tweets.Where(x => x.tweet_id == id).First();
+                return tweet;
+
+            }
+        }
+
+        public bool UpdateTweet(Tweet tweet)
+        {
+            try
+            {
+                using (FSDEntities dbContext = new FSDEntities())
+                {
+
+                    var PresntTweet = (Tweet)dbContext.Tweets.Where(x => x.tweet_id == tweet.tweet_id).First();
+                    PresntTweet.message = tweet.message;
+                    dbContext.SaveChanges();
+                    return true;
+
+                }
+            }
+
+            catch
+            {
+                return false;
+            }
         }
 
         public List<FollowersEntity> GetFollowers(string userId)

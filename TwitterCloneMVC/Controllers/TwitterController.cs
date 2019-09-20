@@ -97,15 +97,10 @@ namespace TwitterCloneMVC.Controllers
         {
             if (Session["UserId"] != null)
             {
-               //Tweet tweet = new Tweet();
-               
-                using (FSDEntities dbContext = new FSDEntities())
-                {
+                //Tweet tweet = new Tweet();
 
-                   var tweet = (Tweet)dbContext.Tweets.Where(x => x.tweet_id == id).First();
-                    return View(tweet);
-
-                }
+               var tweet= dal.EditTweet(id);
+                return View(tweet);
 
                 
             }
@@ -122,14 +117,21 @@ namespace TwitterCloneMVC.Controllers
             {
                 //Tweet tweet = new Tweet();
 
-                using (FSDEntities dbContext = new FSDEntities())
-                {
+                //using (FSDEntities dbContext = new FSDEntities())
+                //{
 
-                    var PresntTweet = (Tweet)dbContext.Tweets.Where(x => x.tweet_id == tweet.tweet_id).First();
-                    PresntTweet.message = tweet.message;
-                    dbContext.SaveChanges();
+                //    var PresntTweet = (Tweet)dbContext.Tweets.Where(x => x.tweet_id == tweet.tweet_id).First();
+                //    PresntTweet.message = tweet.message;
+                //    dbContext.SaveChanges();
+                //    return RedirectToAction("ManageTweets");
+
+                //}
+                if (dal.UpdateTweet(tweet))
                     return RedirectToAction("ManageTweets");
-
+                else
+                {
+                    ModelState.AddModelError("", "Something went wrong, please contact Admin");
+                    return View();
                 }
 
 
@@ -147,14 +149,21 @@ namespace TwitterCloneMVC.Controllers
             {
                 //Tweet tweet = new Tweet();
 
-                using (FSDEntities dbContext = new FSDEntities())
-                {
+                //using (FSDEntities dbContext = new FSDEntities())
+                //{
 
-                    var PresntTweet = (Tweet)dbContext.Tweets.Where(x => x.tweet_id == id).First();
-                    dbContext.Tweets.Remove(PresntTweet);
-                    dbContext.SaveChanges();
+                //    var PresntTweet = (Tweet)dbContext.Tweets.Where(x => x.tweet_id == id).First();
+                //    dbContext.Tweets.Remove(PresntTweet);
+                //    dbContext.SaveChanges();
+                //    return RedirectToAction("ManageTweets");
+
+                //}
+                if (dal.DeleteTweet(id))
                     return RedirectToAction("ManageTweets");
-
+                else
+                {
+                    ModelState.AddModelError("", "Something went wrong, please contact Admin");
+                    return View();
                 }
 
 
@@ -171,36 +180,36 @@ namespace TwitterCloneMVC.Controllers
             if (Session["UserId"] != null)
             {
 
-                using (FSDEntities dbContext = new FSDEntities())
-                {
-                    try
-                    {
-                        List<FollowersEntity> ent = new List<FollowersEntity>();
-                        string userId = Session["UserId"].ToString();
-                        follwers = dbContext.People.Where(x => x.user_id != userId).ToList();
-                      
-                        return View(follwers);
-                    }
+                //using (FSDEntities dbContext = new FSDEntities())
+                //{
+                //    try
+                //    {
+                //        List<FollowersEntity> ent = new List<FollowersEntity>();
+                //        string userId = Session["UserId"].ToString();
+                //        follwers = dbContext.People.Where(x => x.user_id != userId).ToList();
 
-                    catch (DbEntityValidationException ex)
-                    {
-                        // Retrieve the error messages as a list of strings.
-                        var errorMessages = ex.EntityValidationErrors
-                                .SelectMany(x => x.ValidationErrors)
-                                .Select(x => x.ErrorMessage);
+                //        return View(follwers);
+                //    }
 
-                        // Join the list to a single string.
-                        var fullErrorMessage = string.Join("; ", errorMessages);
+                //    catch (DbEntityValidationException ex)
+                //    {
+                //        // Retrieve the error messages as a list of strings.
+                //        var errorMessages = ex.EntityValidationErrors
+                //                .SelectMany(x => x.ValidationErrors)
+                //                .Select(x => x.ErrorMessage);
 
-                        // Combine the original exception message with the new one.
-                        var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+                //        // Join the list to a single string.
+                //        var fullErrorMessage = string.Join("; ", errorMessages);
 
-                        // Throw a new DbEntityValidationException with the improved exception message.
-                        throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
-                    }
-                }
+                //        // Combine the original exception message with the new one.
+                //        var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
 
+                //        // Throw a new DbEntityValidationException with the improved exception message.
+                //        throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+                //    }
+                //}
 
+                follwers = dal.SearchtoFollow(Session["UserId"].ToString());
             }
             return View();
         }
@@ -210,11 +219,13 @@ namespace TwitterCloneMVC.Controllers
             if (Session["UserId"] != null)
             {
                 string userid = Session["UserId"].ToString();
-                using (FSDEntities dbContext = new FSDEntities())
-                {
-                    Person present = dbContext.People.Where(x => x.user_id == userid).First();
-                    return View(present);
-                }
+                //using (FSDEntities dbContext = new FSDEntities())
+                //{
+                //    Person present = dbContext.People.Where(x => x.user_id == userid).First();
+                //    return View(present);
+                //}
+                Person present = dal.ManageAccount(userid);
+                return View(present);
 
             }
 
@@ -226,15 +237,24 @@ namespace TwitterCloneMVC.Controllers
             if (Session["UserId"] != null)
             {
                 string userid = Session["UserId"].ToString();
-                using (FSDEntities dbContext = new FSDEntities())
-                {
-                    Person present = dbContext.People.Where(x => x.user_id == userid).First();
-                    present.email = updatePerson.email;
-                    present.fullName = updatePerson.fullName;
-                    present.active = updatePerson.active;
-                    dbContext.SaveChanges();
+                //using (FSDEntities dbContext = new FSDEntities())
+                //{
+                //    Person present = dbContext.People.Where(x => x.user_id == userid).First();
+                //    present.email = updatePerson.email;
+                //    present.fullName = updatePerson.fullName;
+                //    present.active = updatePerson.active;
+                //    dbContext.SaveChanges();
+                //    return RedirectToAction("LoggedIn", "Account");
+                //}
+                if (dal.UpdateAccount(updatePerson, userid))
                     return RedirectToAction("LoggedIn", "Account");
+                else
+                {
+                    ModelState.AddModelError("", "Something went wrong while update persond details, please contact Admin");
+                    return View();
                 }
+                    
+
 
             }
 
@@ -246,37 +266,41 @@ namespace TwitterCloneMVC.Controllers
             Person toBeFollowedPerson = new Person();
             if (Session["UserId"] != null)
             {
+                if (dal.AddToFollow(Session["UserId"].ToString()))
+                    return RedirectToAction("ManageFollowing");
+                else
+                    return RedirectToAction("Error");
 
-                using (FSDEntities dbContext = new FSDEntities())
-                {
-                    try
-                    {
-                        List<FollowersEntity> ent = new List<FollowersEntity>();
-                        string userId = Session["UserId"].ToString();
-                        toBeFollowedPerson = dbContext.People.Where(x => x.user_id == id).FirstOrDefault();
-                        dbContext.People.Where(x => x.user_id == userId).First().People.Add(toBeFollowedPerson);
-                        //presentPerson.People.Add(toBeFollowedPerson);
-                        dbContext.SaveChanges();
-                        return RedirectToAction("ManageFollowing");
-                    }
+                //using (FSDEntities dbContext = new FSDEntities())
+                //{
+                //    try
+                //    {
+                //        List<FollowersEntity> ent = new List<FollowersEntity>();
+                //        string userId = Session["UserId"].ToString();
+                //        toBeFollowedPerson = dbContext.People.Where(x => x.user_id == id).FirstOrDefault();
+                //        dbContext.People.Where(x => x.user_id == userId).First().People.Add(toBeFollowedPerson);
+                //        //presentPerson.People.Add(toBeFollowedPerson);
+                //        dbContext.SaveChanges();
+                //        return RedirectToAction("ManageFollowing");
+                //    }
 
-                    catch (DbEntityValidationException ex)
-                    {
-                        // Retrieve the error messages as a list of strings.
-                        var errorMessages = ex.EntityValidationErrors
-                                .SelectMany(x => x.ValidationErrors)
-                                .Select(x => x.ErrorMessage);
+                //    catch (DbEntityValidationException ex)
+                //    {
+                //        // Retrieve the error messages as a list of strings.
+                //        var errorMessages = ex.EntityValidationErrors
+                //                .SelectMany(x => x.ValidationErrors)
+                //                .Select(x => x.ErrorMessage);
 
-                        // Join the list to a single string.
-                        var fullErrorMessage = string.Join("; ", errorMessages);
+                //        // Join the list to a single string.
+                //        var fullErrorMessage = string.Join("; ", errorMessages);
 
-                        // Combine the original exception message with the new one.
-                        var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+                //        // Combine the original exception message with the new one.
+                //        var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
 
-                        // Throw a new DbEntityValidationException with the improved exception message.
-                        throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
-                    }
-                }
+                //        // Throw a new DbEntityValidationException with the improved exception message.
+                //        throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+                //    }
+                //}
 
 
             }
@@ -285,6 +309,11 @@ namespace TwitterCloneMVC.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+        }
+
+        public ActionResult Error()
+        {
+            return View();
         }
     }
 }
