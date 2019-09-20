@@ -1,0 +1,38 @@
+﻿@model IEnumerable<TwitterCloneMVC.Models.Tweet>
+
+@{
+    ViewBag.Title = "Manage your Tweets";
+}
+
+<h2>Manage your Tweets</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.message)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Created)
+        </th>
+       
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.message)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Created)
+        </td>
+       
+        <td>
+            @Html.ActionLink("Edit", "EditTweet", new { id=item.tweet_id }) |
+            @Html.ActionLink("Delete", "DeleteTweet", new { id=item.tweet_id })
+        </td>
+    </tr>
+}
+
+</table>

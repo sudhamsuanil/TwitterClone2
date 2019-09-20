@@ -1,0 +1,29 @@
+﻿@model IEnumerable<TwitterCloneMVC.Models.FollowersEntity>
+
+@{
+    ViewBag.Title = "Following ...";
+}
+
+<h2>ManageFollowing</h2>
+
+<p>
+    @Html.ActionLink("Follow Some one?", "SearchToFollow")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.followerName)
+        </th>
+       
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.followerName)
+        </td>
+       
+    </tr>
+}
+
+</table>

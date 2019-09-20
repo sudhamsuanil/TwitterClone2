@@ -1,0 +1,65 @@
+﻿@*@model IEnumerable<TwitterCloneMVC.Models.Tweet>*@
+
+@{
+    ViewBag.Title = "LoggedIn";
+}
+
+<script type="text/javascript">
+
+
+
+ 
+
+
+
+</script>
+@if (Session["UserId"] != null)
+{
+    <h4>My Twitter Home Page!</h4>
+    <div class="row">
+        @*<div class="col-sm-3">
+                <div class="form-group">
+                    <label for="followId">Follow</label>
+                    <input class="form-control" id="followId" type="text" placeholder="Search person" />
+                </div>
+            </div>*@
+
+        @using (Html.BeginForm("AddTweet", "Twitter", FormMethod.Post))
+        {
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="form-group shadow-textarea">
+                        <label for="tweetTextArea">Tweet Box</label>
+                        <textarea class="form-control" name="tweetTextArea" rows="3" placeholder="Write something here..." maxlength="130" onkeyup="textCounter(this,'counter',130);"></textarea>
+                        Characters left - <input disabled maxlength="3" size="3" value="130" id="counter" />
+                    </div>
+                    <div class="form-group text-right">
+                        <input type="submit" class="btn-primary" value="Tweet" />
+                    </div>
+
+                </div>
+            </div>
+
+        }
+    </div>
+
+    <div id="partialTweetArea">
+        @Html.Partial("TimeLinePartial")
+    </div>
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/jquery-3.3.1.min.js")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $(function () {
+
+            setInterval(function () { $('#partialTweetArea').load('/Account/TimeLinePartial'); }, 3000);// every 3 sec
+
+        });
+    </script>
+}
+
+

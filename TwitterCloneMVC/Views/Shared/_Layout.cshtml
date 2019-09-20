@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Twitter Clone", "LoggedIn", "Account", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @if (Session["UserId"] != null)
+                    {
+                        <li>@Html.ActionLink("Home", "LoggedIn", "Account")</li>
+                        @*<li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                   Manage Profile
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">@Html.ActionLink("Followers", "Followers", "Twitter")</a>
+                    <a class="dropdown-item" href="#">@Html.ActionLink("Following", "Following", "Twitter")</a>
+                    <a class="dropdown-item" href="#">@Html.ActionLink("Account", "ManageAccount", "Twitter")</a>
+                </div>
+            </li>*@
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                Profile
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("View Followers", "ViewFollowers", "Twitter")</li>
+                                <li>@Html.ActionLink("Manage Following", "ManageFollowing", "Twitter")</li>
+                                <li>@Html.ActionLink("Manage yur Tweets", "ManageTweets", "Twitter")</li>
+                                <li>@Html.ActionLink("Manage Account", "ManageAccounts", "Twitter")</li>
+                            </ul>
+                        </li>
+                        @*<li>@Html.ActionLink("Profile", "Profile", "Twitter")</li>*@
+                    }
+
+                </ul>
+                @Html.Partial("_LoginPartial")
+              
+            </div>
+            
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

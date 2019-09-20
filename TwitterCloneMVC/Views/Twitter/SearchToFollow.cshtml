@@ -1,0 +1,42 @@
+﻿@model IEnumerable<TwitterCloneMVC.Models.Person>
+
+@{
+    ViewBag.Title = "SearchToFollow";
+}
+
+<h2>Search To Follow</h2>
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.fullName)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.joined)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.fullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.email)
+            </td>
+
+            <td>
+                @Html.ActionLink("Follow", "AddToFollow", new { id = item.user_id })
+
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,33 @@
+﻿@model IEnumerable<TwitterCloneMVC.Models.FollowersEntity>
+@{
+    ViewBag.Title = "ViewFollowers";
+}
+
+<h2>Followers List</h2>
+<table class="table">
+<tr>
+    <th>
+        @Html.DisplayNameFor(model => model.followerId)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.followerName)
+    </th>
+  
+</tr>
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.followerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.followerName)
+            </td>
+           
+        </tr>
+    }
+}
+
+</table>
